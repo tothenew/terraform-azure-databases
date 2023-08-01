@@ -21,8 +21,8 @@ Before you begin, ensure you have the following requirements met:
 
 | Module Name       | Variable Name                                 | Type   | Description                                                                                        |
 |-------------------|-----------------------------------------------|--------|----------------------------------------------------------------------------------------------------|
-| N/A               | project                                       | string | The name of the project.                                                                           |
-| N/A               | environment                                   | string | The name of the environment.                                                                       |
+| locals               | project                                       | string | The name of the project.                                                                           |
+| locals              | environment                                   | string | The name of the environment.                                                                       |
 | module.resource_group | resource_group_name                           | string | The name of the resource group to be created.                                                       |
 | module.resource_group | location                                      | string | The location where the resource group will be created.                                             |
 | module.networking  | vnet-name                                     | string | The name of the virtual network to be created.                                                     |
