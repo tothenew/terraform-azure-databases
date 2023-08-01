@@ -1,5 +1,5 @@
 module "create_database" {
-  source                                   = "git::https://github.com/tothenew/terraform-azure-databases.git"
+  source                                   = "git::https://github.com/tothenew/terraform-azure-databases.git?ref=database-v1"
   environment                              = "dev"
   project                                  = "azure"
   

@@ -54,15 +54,6 @@ resource "azurerm_mariadb_server" "mariadb_server" {
   }
 }
 
-
-data "azurerm_private_endpoint_connection" "private-ip1" {
-  count               = var.create_mariadb ? 1 : 0
-  name                = azurerm_private_endpoint.pep1.0.name
-  resource_group_name = var.resource_group
-  depends_on          = [azurerm_mariadb_server.mariadb_server]
-}
-
-
 resource "azurerm_private_dns_zone" "dnszone1" {
   count               = var.create_mariadb ? 1 : 0
   name                = var.mariadb_private_dns_zone_name
