@@ -1,18 +1,15 @@
 module "mysql" {
   source                                   = "./module/mysql"
 
-  name_prefix                              = local.name_prefix
-  default_tags                             = var.default_tags
-  common_tags                              = var.common_tags
+  # name_prefix                              = local.name_prefix
+  # default_tags                             = var.default_tags
+  # common_tags                              = var.common_tags
 
   resource_group                           = data.azurerm_resource_group.rg.name
   location                                 = var.location
   vnet_name                                = data.azurerm_virtual_network.vnet.name
   vnet_id                                  = data.azurerm_virtual_network.vnet.id
-  subnet_name                              = var.subnet_name
-  address_prefixes                         = var.address_prefixes
-  service_endpoints                        = var.service_endpoints
-  delegation_name                          = var.delegation_name
+  subnet_id                                = data.azurerm_subnet.db_subnet.id
   dns_zone_virtual_network_link_name       = var.dns_zone_virtual_network_link_name
 
   create_mysql_fs                          = var.create_mysql_fs
@@ -25,8 +22,8 @@ module "mysql" {
   create_mode                              = var.create_mode
  
   private_dns_zone_mysql_fs_name           = var.private_dns_zone_mysql_fs_name
-  service_delegation_name_mysql_fs         = var.service_delegation_name_mysql_fs
-  service_delegation_action_mysql_fs       = var.service_delegation_action_mysql_fs
+  # service_delegation_name_mysql_fs         = var.service_delegation_name_mysql_fs
+  # service_delegation_action_mysql_fs       = var.service_delegation_action_mysql_fs
 
   mysql_fs_server_name                     = var.mysql_fs_server_name
   auto_grow_enabled                        = var.auto_grow_enabled
@@ -43,14 +40,18 @@ module "mysql" {
   server_configuration_name                = var.server_configuration_name
   value                                    = var.value  
 
+   tags = merge(local.common_tags, tomap({
+    "Name" : local.project_name_prefix
+  }))
+
 }
 
 module "Postgresql" {
   source                                   = "./module/postgresql"
 
-  name_prefix                              = local.name_prefix
-  default_tags                             = var.default_tags
-  common_tags                              = var.common_tags
+  # name_prefix                              = local.name_prefix
+  # default_tags                             = var.default_tags
+  # common_tags                              = var.common_tags
 
   create_postgresql_fs                     = var.create_postgresql_fs
   
@@ -58,10 +59,7 @@ module "Postgresql" {
   location                                 = var.location
   vnet_name                                = data.azurerm_virtual_network.vnet.name
   vnet_id                                  = data.azurerm_virtual_network.vnet.id
-  subnet_name                              = var.subnet_name
-  address_prefixes                         = var.address_prefixes
-  service_endpoints                        = var.service_endpoints
-  delegation_name                          = var.delegation_name
+  subnet_id                                = data.azurerm_subnet.db_subnet.id
   dns_zone_virtual_network_link_name       = var.dns_zone_virtual_network_link_name
     
   public_network_access_enabled            = var.public_network_access_enabled
@@ -71,8 +69,6 @@ module "Postgresql" {
   create_mode                              = var.create_mode
   high_availability_mode                   = var.high_availability_mode
 
-  service_delegation_name_postgresql_fs    = var.service_delegation_name_postgresql_fs
-  service_delegation_action_postgresql_fs  = var.service_delegation_action_postgresql_fs
   private_dns_zone_postgresql_fs_name      = var.private_dns_zone_postgresql_fs_name
 
   fs_server_name                           = var.fs_server_name
@@ -83,14 +79,13 @@ module "Postgresql" {
   fs_db_collation                          = var.fs_db_collation
   fs_db_charset                            = var.fs_db_charset
 
+   tags = merge(local.common_tags, tomap({
+    "Name" : local.project_name_prefix
+  }))
 }
 
 module "mariadb" {
   source                                   = "./module/mariadb"
-
-  name_prefix                              = local.name_prefix
-  default_tags                             = var.default_tags
-  common_tags                              = var.common_tags
 
   create_mariadb                           = var.create_mariadb
   resource_group                           = data.azurerm_resource_group.rg.name
@@ -98,8 +93,7 @@ module "mariadb" {
 
   vnet_name                                = data.azurerm_virtual_network.vnet.name
   vnet_id                                  = data.azurerm_virtual_network.vnet.id
-  subnet_name                              = var.subnet_name
-  address_prefixes                         = var.address_prefixes
+  subnet_id                                = data.azurerm_subnet.db_subnet.id
 
   dns_zone_virtual_network_link_name              = var.dns_zone_virtual_network_link_name
   private_endpoint_network_policies_enabled       = var.private_endpoint_network_policies_enabled 
@@ -124,4 +118,8 @@ module "mariadb" {
   db-name                                  = var.db-name
   databases_charset                        = var.databases_charset
   databases_collation                      = var.databases_collation
+
+  tags = merge(local.common_tags, tomap({
+    "Name" : local.project_name_prefix
+  }))
 }

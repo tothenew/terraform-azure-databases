@@ -5,10 +5,11 @@ module "database_main" {
   create_postgresql_fs                     = false
   create_mariadb                           = false
 
+  project_name_prefix                      = "database"
+  
   resource_group_name                      = "database-rg"
   location                                 = "EAST US 2" 
   vnet_name                                = "myvnet"
   subnet_name                              = "db-subnet"
-  address_prefixes                         = ["10.0.4.0/28"]
 }
 

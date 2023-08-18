@@ -1,28 +1,13 @@
-variable "name_prefix" {
-  description = "Used in tags cluster and nodes"
-  type        = string
-}
-
-variable "default_tags" {
+variable "tags" {
   type        = map(string)
-  description = "A map to add common tags to all the resources"
-
-}
-
-variable "common_tags" {
-  type        = map(string)
-  description = "A map to add common tags to all the resources"
+  description = "A map of tags to add to all resources"
 }
 
 variable "resource_group" {}
 variable "location" {}
 variable "vnet_name" {}
 variable "vnet_id" {}
-variable "subnet_name" {}
-variable "address_prefixes" {}
-
-variable "service_endpoints" {}
-variable "delegation_name" {}
+variable "subnet_id" {}
 variable "dns_zone_virtual_network_link_name" {}
 variable "create_mysql_fs" {}
 
@@ -67,12 +52,12 @@ variable "private_dns_zone_mysql_fs_name" {
   type = string
 }
 
-variable "service_delegation_name_mysql_fs" {
-  type = string
-}
+# variable "service_delegation_name_mysql_fs" {
+#   type = string
+# }
 
-variable "service_delegation_action_mysql_fs" {
-}
+# variable "service_delegation_action_mysql_fs" {
+# }
 
 variable "mysql_fs_server_name" {
   type = string

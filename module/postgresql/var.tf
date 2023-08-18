@@ -1,29 +1,34 @@
-variable "name_prefix" {
-  description = "Used in tags cluster and nodes"
-  type        = string
-}
+# variable "name_prefix" {
+#   description = "Used in tags cluster and nodes"
+#   type        = string
+# }
 
 
-variable "default_tags" {
+# variable "default_tags" {
+#   type        = map(string)
+#   description = "A map to add common tags to all the resources"
+# }
+
+# variable "common_tags" {
+#   type        = map(string)
+#   description = "A map to add common tags to all the resources"
+# }
+
+variable "tags" {
   type        = map(string)
-  description = "A map to add common tags to all the resources"
-}
-
-variable "common_tags" {
-  type        = map(string)
-  description = "A map to add common tags to all the resources"
+  description = "A map of tags to add to all resources"
 }
 
 variable "resource_group" {}
 variable "location" {}
 variable "vnet_name" {}
 variable "vnet_id" {}
-variable "subnet_name" {}
+variable "subnet_id" {}
 variable "create_postgresql_fs"{}
-variable "address_prefixes" {}
-variable "service_endpoints" {}
+# # variable "address_prefixes" {}
+# variable "service_endpoints" {}
 
-variable "delegation_name" {}
+# variable "delegation_name" {}
 
 variable "dns_zone_virtual_network_link_name" {}
 
@@ -66,9 +71,9 @@ variable "create_mode" {
 
 variable "private_dns_zone_postgresql_fs_name" {}
 
-variable "service_delegation_name_postgresql_fs" {}
+# variable "service_delegation_name_postgresql_fs" {}
 
-variable "service_delegation_action_postgresql_fs" {}
+# variable "service_delegation_action_postgresql_fs" {}
 
 variable "fs_server_name" {
   type        = string

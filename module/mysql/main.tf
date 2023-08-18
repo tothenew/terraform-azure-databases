@@ -2,30 +2,12 @@
 ####                         MYSQL FLEXIBLE SERVER                                ####
 ######################################################################################
 
-resource "azurerm_subnet" "mysql_db_subnet" {
-  count                = var.create_mysql_fs ? 1 : 0
-  name                 = var.subnet_name
-  resource_group_name  = var.resource_group
-  virtual_network_name = var.vnet_name
-  address_prefixes     = var.address_prefixes
-  service_endpoints    = var.service_endpoints
-  delegation {
-    name = var.delegation_name
-    service_delegation {
-      name   = var.service_delegation_name_mysql_fs
-      actions = var.service_delegation_action_mysql_fs
-    }
-  }
-}
-
 resource "azurerm_private_dns_zone" "private_dns_zone" {
   count               = var.create_mysql_fs ? 1 : 0
   name                = var.private_dns_zone_mysql_fs_name
   resource_group_name = var.resource_group
 
-  tags = merge(var.default_tags, var.common_tags , {
-    "Name"        = "${var.name_prefix}",
-  })
+    tags = var.tags
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "dns_vnet_link" {
@@ -35,9 +17,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "dns_vnet_link" {
   virtual_network_id    = var.vnet_id
   resource_group_name   = var.resource_group
 
-  tags = merge(var.default_tags, var.common_tags , {
-    "Name"        = "${var.name_prefix}",
-  })
+  tags                 = var.tags
 }
 
 resource "azurerm_mysql_flexible_server" "mysql_flexible_server" {
@@ -52,7 +32,7 @@ resource "azurerm_mysql_flexible_server" "mysql_flexible_server" {
   create_mode            = var.create_mode
 
 
-  delegated_subnet_id    = azurerm_subnet.mysql_db_subnet[count.index].id
+  delegated_subnet_id    = var.subnet_id
   private_dns_zone_id    = azurerm_private_dns_zone.private_dns_zone[count.index].id
 
  depends_on = [azurerm_private_dns_zone_virtual_network_link.dns_vnet_link]
@@ -65,9 +45,7 @@ resource "azurerm_mysql_flexible_server" "mysql_flexible_server" {
     geo_redundant_backup_enabled = var.geo_redundant_backup_enabled
     zone                         = var.zone
     
-  tags = merge(var.default_tags, var.common_tags , {
-    "Name"        = "${var.name_prefix}",
-  })
+  tags                 = var.tags
 }
 
 resource "azurerm_mysql_flexible_database" "mysql_database" {

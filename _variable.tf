@@ -1,7 +1,7 @@
 variable "project_name_prefix" {
   description = "Used in tags cluster and nodes"
   type        = string
-  default     = "dev"
+  default     = "azure_database"
 }
 
 variable "default_tags" {
@@ -25,46 +25,28 @@ variable "common_tags" {
 variable "resource_group_name" {
   description = "The name of the Azure Resource Group where the resources will be created."
   type        = string
+  default     = "kjnvjnvne_group"
 }
 
 variable "location" {
   description = "The Azure region where the resources will be deployed. E.g., 'East US', 'West Europe', etc."
   type        = string
+  default     = "EAST US 2"  
 }
 
 variable "subnet_name" {
   description = "name of the subnet"
   type        = string
-  default     = "db_subnet"
+  default     = "db-subnet"
 }
 
-variable "address_prefixes" {
-  description = "The list of address prefixes to be used for defining the IP address range for the subnet."
-  type        = list(string)
-  default     = ["10.0.3.0/24"]
-}
 
 variable "vnet_name" {
   description = "name of the virtual network"
   type = string
+  default = "vnet"
 }
 
-variable "vnetcidr" {
-    description = "The CIDR block for the virtual network (VNet)."
-    type        = string
-}
-
-variable "service_endpoints" {
-    description = "The list of service endpoints to be enabled for the subnet."
-    type        = list(string)
-    default     = ["Microsoft.Storage"]
-}
-
-variable "delegation_name" {
-    description = "The name of the delegation to be used for the subnet."
-    type        = string
-    default     = "fs"
-}
 
 variable "dns_zone_virtual_network_link_name" {
     description = "The name of the virtual network link for the private DNS zone."
@@ -87,18 +69,19 @@ variable "create_postgresql_fs" {
 variable "create_mariadb" {
     description = "A boolean flag to determine whether to create the MariaDB resources or not."
     type        = bool
-    default     = false
+    default     = true
 }
 
+########################################################################################################################################
 variable "administrator_login" {
-  description = "The Administrator Login for the PostgreSQL Server. Changing this forces a new resource to be created."
+  description = "The Administrator Login for the database Server. Changing this forces a new resource to be created."
   type        = string
   default     = "db_admin"
 
 }
 
 variable "administrator_password" {
-  description = "The Password associated with the administrator_login for the PostgreSQL Server."
+  description = "The Password associated with the administrator_login for the database Server."
   type        = string
   sensitive   = true
   default     = "123qwe!@#"
@@ -167,18 +150,6 @@ variable "private_dns_zone_mysql_fs_name" {
     default     = "example.mysql.database.azure.com"
 }
 
-variable "service_delegation_name_mysql_fs" {
-    description = "The name of the service delegation for the MySQL Flexible Server."
-    type        = string
-    default     = "Microsoft.DBforMySQL/flexibleServers"
-}
-
-variable "service_delegation_action_mysql_fs" {
-    description = "The list of actions allowed for the service delegation of the MySQL Flexible Server."
-    type        = list(string)
-    default     = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
-}
-
 variable "value" {
   description = " Specifies the value of the MySQL Configuration. See the MySQL documentation for valid values. Changing this forces a new resource to be created."
   type        = string
@@ -206,7 +177,8 @@ variable "firewall_rule_name" {
 variable "zone" {
     description = "The zone for the MySQL Flexible Server."
     type        = number
-    default     = 2
+    default     = 3
+
 }
 
 variable "storagesize_gb" {
@@ -274,20 +246,6 @@ variable "server_configuration_name" {
 ######################################################################################
 ####                         POSTGRESQL FLEXIBLE SERVER                           ####
 ######################################################################################
-
-variable "service_delegation_name_postgresql_fs" {
-    description = "The name of the service delegation for the PostgreSQL Flexible Server."
-    type        = string
-    default     = "Microsoft.DBforPostgreSQL/flexibleServers"
-}
-
-variable "service_delegation_action_postgresql_fs" {
-    description = "The list of service delegation actions for the PostgreSQL Flexible Server."
-    type        = list(string)
-    default     = [
-        "Microsoft.Network/virtualNetworks/subnets/join/action",
-    ]
-}
 
 variable "private_dns_zone_postgresql_fs_name" {
     description = "The name of the private DNS zone for the PostgreSQL Flexible Server."

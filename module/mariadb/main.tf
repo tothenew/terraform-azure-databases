@@ -1,23 +1,11 @@
-resource "azurerm_subnet" "private_endpoint_subnet" {
-  count                                         = var.create_mariadb ? 1 : 0
-  name                                          = var.subnet_name
-  resource_group_name                           = var.resource_group
-  virtual_network_name                          = var.vnet_name
-  address_prefixes                              = var.address_prefixes
-  private_endpoint_network_policies_enabled     = var.private_endpoint_network_policies_enabled
-  
-  }
-
 resource "azurerm_private_endpoint" "private_endpoint" {
   count               = var.create_mariadb ? 1 : 0
   name                = format("%s-private-endpoint", var.server-name)
   location            = var.location
   resource_group_name = var.resource_group
-  subnet_id           = azurerm_subnet.private_endpoint_subnet[count.index].id
+  subnet_id           = var.subnet_id
   
-  tags = merge(var.default_tags, var.common_tags , {
-    "Name"        = "${var.name_prefix}",
-  })
+  tags                 = var.tags
 
   private_service_connection {
     name                           = var.private_service_connection_name
@@ -47,9 +35,7 @@ resource "azurerm_mariadb_server" "mariadb_server" {
   ssl_enforcement_enabled          = var.ssl_enforcement_enabled
   ssl_minimal_tls_version_enforced = var.ssl_minimal_tls_version_enforced
 
-  tags = merge(var.default_tags, var.common_tags , {
-    "Name"        = "${var.name_prefix}",
-  })
+  tags                 = var.tags
 }
 
 resource "azurerm_private_dns_zone" "mariadb_private_dns_zone" {
@@ -57,9 +43,7 @@ resource "azurerm_private_dns_zone" "mariadb_private_dns_zone" {
   name                = var.mariadb_private_dns_zone_name
   resource_group_name = var.resource_group
 
-  tags = merge(var.default_tags, var.common_tags , {
-    "Name"        = "${var.name_prefix}",
-  })
+  tags                 = var.tags
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "mariadb_dns_zone_virtual_network_link" {
@@ -69,9 +53,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "mariadb_dns_zone_virtu
   private_dns_zone_name = azurerm_private_dns_zone.mariadb_private_dns_zone.0.name
   virtual_network_id    = var.vnet_id
 
-  tags = merge(var.default_tags, var.common_tags , {
-    "Name"        = "${var.name_prefix}",
-  })
+  tags                  = var.tags
 }
 
 

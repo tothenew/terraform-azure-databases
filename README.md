@@ -16,6 +16,7 @@ Before you begin, ensure you have the following requirements met:
 
 2. Azure CLI installed and configured with appropriate access rights. You can install the Azure CLI from [https://docs.microsoft.com/en-us/cli/azure/install-azure-cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
 
+3. A Database subnet needs to be created with appropriate SUBNET DELEGATION or NETWORK POLICY FOR PRIVATE ENDPOINTS . 
 
 ### Input Variables
 
@@ -25,9 +26,6 @@ Before you begin, ensure you have the following requirements met:
 | data.azurerm_resource_group | resource_group_name                           | string | The name of your resource group that is already .created .                                                       |
 | "azurerm_virtual_network"  | vnet_name                                     | string | The Name of your virtual network where you want to create your database.                                                     |
 | module.mysql       | subnet_name                                   | string | The name of the subnet for the MySQL database.                                                     |
-| module.mysql       | address_prefixes                              | list   | The list of address prefixes for the subnet.                                                       |
-| module.mysql       | service_endpoints                             | list   | The list of service endpoints.                                                                     |
-| module.mysql       | delegation_name                               | string | The name of the delegation.                                                                        |
 | module.mysql       | dns_zone_virtual_network_link_name            | string | The name of the DNS zone virtual network link.                                                     |
 | module.mysql       | create_mysql_fs                               | bool   | A flag to indicate whether to create the MySQL file server.                                        |
 | module.mysql       | administrator_login                           | string | The administrator login for the MySQL database.                                                    |
@@ -37,8 +35,6 @@ Before you begin, ensure you have the following requirements met:
 | module.mysql       | create_mode                                   | string | The creation mode for the MySQL database.                                                          |
 | module.mysql       | private_dns_zone_mysql_fs_name                | string | The name of the private DNS zone for the MySQL flexible
 server.                                        |
-| module.mysql       | service_delegation_name_mysql_fs              | string | The name of the service delegation for the MySQL flexible server.                                      |
-| module.mysql       | service_delegation_action_mysql_fs            | string | The action of the service delegation for the MySQL flexible server.                                    |
 | module.mysql       | mysql_fs_server_name                          | string | The name of the MySQL flexible server.                                                                 |
 | module.mysql       | auto_grow_enabled                             | bool   | A flag to indicate whether auto-grow is enabled for the MySQL database.                            |
 | module.mysql       | iops                                          | number | The number of IOPS for the MySQL database.                                                         |
@@ -59,8 +55,6 @@ server.                                        |
 | module.Postgresql  | backup_retention_days                         | number | The number of days to retain backups for the PostgreSQL database.                                  |
 | module.Postgresql  | create_mode                                   | string | The creation mode for the PostgreSQL database.                                                     |
 | module.Postgresql  | high_availability_mode                        | string | The high availability mode for the PostgreSQL database.                                            |
-| module.Postgresql  | service_delegation_name_postgresql_fs         | string | The name of the service delegation for the PostgreSQL flexible server.                                 |
-| module.Postgresql  | service_delegation_action_postgresql_fs       | string | The action of the service delegation for the PostgreSQL flexible server.                               |
 | module.Postgresql  | private_dns_zone_postgresql_fs_name           | string | The name of the private DNS zone for the PostgreSQL flexible server.                                   |
 | module.Postgresql  | fs_server_name                                | string | The name of the PostgreSQL flexible server.                                                            |
 | module.Postgresql  | fs_server_version                             | string | The version of the PostgreSQL flexible server.                                                         |
@@ -95,6 +89,15 @@ _dns_zone_name                | string | The name of the private DNS zone for Ma
 Note: Please refer to the module documentation for additional optional variables and their descriptions.
 
 https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources
+
+### Outputs
+
+| Output Name   | Description                            |
+|---------------|----------------------------------------|
+| postgresql_fqdn | Fully Qualified Domain Name (FQDN) for the PostgreSQL server. |
+| mysql_fqdn    | Fully Qualified Domain Name (FQDN) for the MySQL server.      |
+| mariadb_fqdn  | Fully Qualified Domain Name (FQDN) for the MariaDB server.    |
+
 
 ## Note
 

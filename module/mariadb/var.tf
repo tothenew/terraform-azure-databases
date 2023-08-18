@@ -1,25 +1,32 @@
-variable "name_prefix" {
-  description = "Used in tags cluster and nodes"
-  type        = string
-  default     = "Azure_cosmmosdb"
-}
+# variable "name_prefix" {
+#   description = "Used in tags cluster and nodes"
+#   type        = string
+#   default     = "Azure_cosmmosdb"
+# }
 
-variable "default_tags" {
-  type        = map(string)
-  description = "A map to add common tags to all the resources"
-  default = {
-    "Scope" : "Cosmosdb"
-    "CreatedBy" : "Terraform"
-  }
-}
+# variable "default_tags" {
+#   type        = map(string)
+#   description = "A map to add common tags to all the resources"
+#   default = {
+#     "Scope" : "Cosmosdb"
+#     "CreatedBy" : "Terraform"
+#   }
+# }
 
-variable "common_tags" {
+# variable "common_tags" {
+#   type        = map(string)
+#   description = "A map to add common tags to all the resources"
+#   default = {
+#     Project    = "Azure_Cosmosdb",
+#     Managed-By = "TTN",
+#   }
+# }
+
+
+
+variable "tags" {
   type        = map(string)
-  description = "A map to add common tags to all the resources"
-  default = {
-    Project    = "Azure_Cosmosdb",
-    Managed-By = "TTN",
-  }
+  description = "A map of tags to add to all resources"
 }
 
 variable "resource_group" {
@@ -34,14 +41,14 @@ variable "create_mariadb"{}
 
 variable "vnet_name" {}
 variable "vnet_id" {}
-variable "subnet_name" {}
+variable "subnet_id" {}
 
 variable "server-name" {
   type = string
 }
 
-variable "address_prefixes" {
-}
+# variable "address_prefixes" {
+# }
 
 variable "dns_zone_virtual_network_link_name" {
   type = string
