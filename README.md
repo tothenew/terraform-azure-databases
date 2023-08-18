@@ -70,7 +70,7 @@ Before you begin, ensure you have the following requirements met:
 | module.mariadb     | private_service_connection_name              | string | The name of the private service connection for MariaDB.                                           |
 | module.mariadb     | private_service_connection_is_manual_connection | bool | A flag to indicate whether the private service connection for MariaDB is manual.                   |
 | module.mariadb     | private_service_connection_subresource_names | list   | The list of subresource names for the private service connection for MariaDB.                      |
-_dns_zone_name                | string | The name of the private DNS zone for MariaDB.                                                      |
+| module.mariadb     | private_dns_zone_name    | string | The name of the private DNS zone for MariaDB.                                                      |
 | module.mariadb     | server-name                                   | string | The name of the MariaDB server.                                                                    |
 | module.mariadb     | administrator_login                           | string | The administrator login for MariaDB.                                                               |
 | module.mariadb     | administrator_password                        | string | The administrator password for MariaDB.                                                            |
