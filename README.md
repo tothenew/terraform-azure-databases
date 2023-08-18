@@ -33,8 +33,7 @@ Before you begin, ensure you have the following requirements met:
 | module.mysql       | db_names                                      | list   | The list of database names for the MySQL database.                                                 |
 | module.mysql       | backup_retention_days                         | number | The number of days to retain backups for the MySQL database.                                       |
 | module.mysql       | create_mode                                   | string | The creation mode for the MySQL database.                                                          |
-| module.mysql       | private_dns_zone_mysql_fs_name                | string | The name of the private DNS zone for the MySQL flexible
-server.                                        |
+| module.mysql       | private_dns_zone_mysql_fs_name                | string | The name of the private DNS zone for the MySQL flexible server.                                        |
 | module.mysql       | mysql_fs_server_name                          | string | The name of the MySQL flexible server.                                                                 |
 | module.mysql       | auto_grow_enabled                             | bool   | A flag to indicate whether auto-grow is enabled for the MySQL database.                            |
 | module.mysql       | iops                                          | number | The number of IOPS for the MySQL database.                                                         |
