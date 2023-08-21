@@ -18,6 +18,22 @@ Before you begin, ensure you have the following requirements met:
 
 3. A Database subnet needs to be created with appropriate SUBNET DELEGATION or NETWORK POLICY FOR PRIVATE ENDPOINTS . 
 
+
+## Resources
+
+| Name                                     | Description                                                            | Type              |
+|------------------------------------------|------------------------------------------------------------------------|-------------------|
+| azurerm_mysql_flexible_server | Azure MYSQL flexible server         | azurerm           |
+| azurerm_postgresql_flexible_server       | Azure POSTGRESQL flexible server                                                 | azurerm           |
+| azurerm_mariadb_server                    | Azure mariadb server App.                                                   | azurerm           |
+| azurerm_mysql_flexible_database | Azure MYSQL flexible server  database       | azurerm           |
+| azurerm_postgresql_flexible_server_database       | Azure POSTGRESQL flexible server  database                                              | azurerm           |
+| azurerm_mariadb_database                    | Azure mariadb database     |   azurerm           | 
+| azurerm_private_dns_zone                    | Azure private dns zone     | azurerm           |
+| azurerm_private_dns_zone_virtual_network_link                    | Azure  Private DNS zone Virtual Network Links.     |   azurerm           | 
+| azurerm_private_endpoint                    | Azure private endpoint for mariadb server     | azurerm           |
+
+
 ### Input Variables
 
 | Module Name       | Variable Name                                 | Type   | Description                                                                                        |

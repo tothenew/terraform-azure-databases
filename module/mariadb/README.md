@@ -2,31 +2,6 @@
 
 This Terraform configuration deploys resources for managing MariaDB servers with private endpoint integration in Azure. It consists of the following modules:
 
-### Module: `azurerm_subnet`
-
-This module creates a subnet within a virtual network. It is used to define the subnet where the MariaDB server with private endpoint will reside.
-
-**Input Variables:**
-- `create_mariadb`: A boolean flag to determine whether to create the MariaDB resources or not.
-- `subnet_name`: The name of the subnet.
-- `resource_group`: The name of the resource group where the subnet should be created.
-- `vnet_name`: The name of the virtual network to which the subnet belongs.
-- `address_prefixes`: The list of address prefixes to be used for the subnet.
-- `private_endpoint_network_policies_enabled`: A boolean flag to enable or disable network policies for private endpoint.
-
-**Usage Example:**
-```
-module "subnet" {
-  source                             = "./module/subnet"
-  create_mariadb                     = var.create_mariadb
-  subnet_name                        = "my-subnet"
-  resource_group                     = azurerm_resource_group.rg.name
-  vnet_name                          = azurerm_virtual_network.vnet.name
-  address_prefixes                   = ["10.0.2.0/24"]
-  private_endpoint_network_policies_enabled = true
-}
-```
-
 ### Module: `azurerm_private_endpoint`
 
 This module creates a private endpoint for the MariaDB server. It establishes a private connection to the MariaDB server within the specified subnet.
@@ -42,9 +17,7 @@ This module creates a private endpoint for the MariaDB server. It establishes a 
 
 **Usage Example:**
 ```
-module "private_endpoint" {
-  source                                  = "./module/private_endpoint"
-  create_mariadb                          = var.create_mariadb
+resource "private_endpoint" {
   server-name                             = "mariadb-server"
   location                                = var.location
   resource_group                          = azurerm_resource_group.rg.name
@@ -78,9 +51,8 @@ This module creates the MariaDB server in Azure.
 
 **Usage Example:**
 ```
-module "mariadb_server" {
-  source                                = "./module/mariadb_server"
-  create_mariadb                        = var.create_mariadb
+resource "mariadb_server" {
+  create_mariadb                        = true
   server-name                           = "mariadb-server"
   location                              = var.location
   resource_group                        = azurerm_resource_group.rg.name
@@ -98,9 +70,6 @@ module "mariadb_server" {
   ssl_enforcement_enabled               = true
   ssl_minimal_tls_version_enforced      = "TLSEnforcementDisabled"
 
-  tags = merge(var.default_tags, var.common_tags , {
-    "Name"        = "${var.name_prefix}",
-  })
 }
 ```
 
@@ -116,15 +85,10 @@ This module creates a private DNS zone in Azure.
 
 **Usage Example:**
 ```
-module "private_dns_zone" {
-  source                                  = "./module/private_dns_zone"
-  create_mariadb                          = var.create_mariadb
+resource "private_dns_zone" {
+
   mariadb_private_dns_zone_name           = "my-private-dns-zone"
   resource_group                          = azurerm_resource_group.rg.name
-  tags                                    = {
-    environment = "development"
-    project     = "my-mariadb-project"
-  }
 }
 ```
 
@@ -142,17 +106,11 @@ This module creates a virtual network link for the private DNS zone.
 
 **Usage Example:**
 ```
-module "private_dns_zone_link" {
-  source                                  = "./module/private_dns_zone_link"
-  create_mariadb                          = var.create_mariadb
+resource "private_dns_zone_link" {
   dns_zone_virtual_network_link_name      = "my-dns-zone-link"
   resource_group                          = azurerm_resource_group.rg.name
   private_dns_zone_name                   = "my-private-dns-zone"
   virtual_network_id                      = azurerm_virtual_network.vnet.id
-  tags                                    = {
-    environment = "development"
-    project     = "my-mariadb-project"
-  }
 }
 ```
 
@@ -170,9 +128,8 @@ This module creates a database within the MariaDB server.
 
 **Usage Example:**
 ```
-module "mariadb_database" {
-  source                                = "./module/mariadb_database"
-  create_mariadb                        = var.create_mariadb
+resource "mariadb_database" {
+
   db-name                               = "my-database"
   resource_group                        = azurerm_resource_group.rg.name
   server_name                           = azurerm_mariadb_server.mariadb_server.name
@@ -185,4 +142,6 @@ module "mariadb_database" {
 
 Ensure that you have the required provider block for Azure before using this configuration. Also, update the values of input variables as per your requirements before running Terraform commands.
 
-Please refer to the input variable descriptions in each module for more details on their usage.
+Note: Please refer to the module documentation for additional optional variables and their descriptions.
+
+https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mariadb_server

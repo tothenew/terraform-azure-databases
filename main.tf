@@ -1,10 +1,6 @@
 module "mysql" {
   source                                   = "./module/mysql"
 
-  # name_prefix                              = local.name_prefix
-  # default_tags                             = var.default_tags
-  # common_tags                              = var.common_tags
-
   resource_group                           = data.azurerm_resource_group.rg.name
   location                                 = var.location
   vnet_name                                = data.azurerm_virtual_network.vnet.name
@@ -22,8 +18,6 @@ module "mysql" {
   create_mode                              = var.create_mode
  
   private_dns_zone_mysql_fs_name           = var.private_dns_zone_mysql_fs_name
-  # service_delegation_name_mysql_fs         = var.service_delegation_name_mysql_fs
-  # service_delegation_action_mysql_fs       = var.service_delegation_action_mysql_fs
 
   mysql_fs_server_name                     = var.mysql_fs_server_name
   auto_grow_enabled                        = var.auto_grow_enabled
@@ -49,9 +43,6 @@ module "mysql" {
 module "Postgresql" {
   source                                   = "./module/postgresql"
 
-  # name_prefix                              = local.name_prefix
-  # default_tags                             = var.default_tags
-  # common_tags                              = var.common_tags
 
   create_postgresql_fs                     = var.create_postgresql_fs
   

@@ -2,37 +2,6 @@
 
 This Terraform configuration deploys resources for managing Azure MySQL Flexible Server. It consists of the following modules:
 
-### Module: `azurerm_subnet`
-
-This module creates a subnet within a virtual network. It is used to define the subnet where the Azure MySQL Flexible Server will reside.
-
-**Input Variables:**
-- `create_mysql_fs`: A boolean flag to determine whether to create the Azure MySQL Flexible Server resources or not.
-- `subnet_name`: The name of the subnet.
-- `resource_group`: The name of the resource group where the subnet should be created.
-- `vnet_name`: The name of the virtual network to which the subnet belongs.
-- `address_prefixes`: The list of address prefixes to be used for the subnet.
-- `service_endpoints`: The list of service endpoints to be associated with the subnet.
-- `delegation_name`: The name of the delegation for the subnet.
-- `service_delegation_name_mysql_fs`: The name of the service delegation for Azure MySQL Flexible Server.
-- `service_delegation_action_mysql_fs`: The actions allowed for the service delegation.
-
-**Usage Example:**
-```
-module "subnet" {
-  source                = "./module/subnet"
-  create_mysql_fs       = var.create_mysql_fs
-  subnet_name           = "my-subnet"
-  resource_group        = azurerm_resource_group.rg.name
-  vnet_name             = azurerm_virtual_network.vnet.name
-  address_prefixes      = ["10.0.2.0/24"]
-  service_endpoints     = ["Microsoft.Sql"]
-  delegation_name       = "mysqlDelegation"
-  service_delegation_name_mysql_fs = "Microsoft.DBforMySQL/flexibleServers"
-  service_delegation_action_mysql_fs = ["Microsoft.DBforMySQL/flexibleServers/write"]
-}
-```
-
 ### Module: `azurerm_private_dns_zone`
 
 This module creates a private DNS zone in Azure. It is used to define the private DNS zone for the Azure MySQL Flexible Server.
@@ -44,9 +13,7 @@ This module creates a private DNS zone in Azure. It is used to define the privat
 
 **Usage Example:**
 ```
-module "private_dns_zone" {
-  source                        = "./module/private_dns_zone"
-  create_mysql_fs               = var.create_mysql_fs
+resource "private_dns_zone" {
   private_dns_zone_mysql_fs_name = "myprivatednszone.local"
   resource_group                = azurerm_resource_group.rg.name
 }
@@ -65,9 +32,7 @@ This module creates a virtual network link for the private DNS zone. It links th
 
 **Usage Example:**
 ```
-module "private_dns_zone_virtual_network_link" {
-  source                                 = "./module/private_dns_zone_virtual_network_link"
-  create_mysql_fs                        = var.create_mysql_fs
+resource "private_dns_zone_virtual_network_link" {
   dns_zone_virtual_network_link_name      = "my-vnet-link"
   private_dns_zone_name                  = "myprivatednszone.local"
   virtual_network_id                     = azurerm_virtual_network.vnet.id
@@ -101,8 +66,7 @@ This module creates the Azure MySQL Flexible Server.
 **Usage Example:**
 ```
 module "mysql_flexible_server" {
-  source                          = "./module/mysql_flexible_server"
-  create_mysql_fs                 = var.create_mysql_fs
+  create_mysql_fs                 = true
   mysql_fs_server_name            = "my-mysql-server"
   resource_group                  = azurerm_resource_group.rg.name
   location                        = var.location
@@ -119,9 +83,6 @@ module "mysql_flexible_server" {
   geo_redundant_backup_enabled    = true
   zone                            = "1"
 
-  tags = merge(var.default_tags, var.common_tags , {
-    "Name"        = "${var.name_prefix}",
-  })
 }
 ```
 
@@ -138,11 +99,7 @@ This module creates a database within the Azure MySQL Flexible Server.
 
 **Usage Example:**
 ```
-module "mysql_flexible_database" {
-  source                = "./module/mysql_flexible_database"
-  create_mysql
-
-_fs       = var.create_mysql_fs
+resource "mysql_flexible_database" {
   db_names              = "mydatabase"
   resource_group        = azurerm_resource_group.rg.name
   mysql_fs_db_charset   = "utf8"
@@ -154,4 +111,6 @@ _fs       = var.create_mysql_fs
 
 Ensure that you have the required provider block for Azure before using this configuration. Also, update the values of input variables as per your requirements before running Terraform commands.
 
-Please refer to the input variable descriptions in each module for more details on their usage.
+Note: Please refer to the module documentation for additional optional variables and their descriptions.
+
+https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mysql_flexible_server

@@ -22,6 +22,7 @@ variable "common_tags" {
   }
 }
 
+
 variable "resource_group_name" {
   description = "The name of the Azure Resource Group where the resources will be created."
   type        = string
