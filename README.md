@@ -34,72 +34,114 @@ Before you begin, ensure you have the following requirements met:
 | azurerm_private_endpoint                    | Azure private endpoint for mariadb server     | azurerm           |
 
 
-### Input Variables
+### data source Variables
 
 | Module Name       | Variable Name                                 | Type   | Description                                                                                        |
 |-------------------|-----------------------------------------------|--------|----------------------------------------------------------------------------------------------------|
 | locals               | project                                       | string | The name of the project.                                                                           |
 | data.azurerm_resource_group | resource_group_name                           | string | The name of your resource group that is already .created .                                                       |
 | "azurerm_virtual_network"  | vnet_name                                     | string | The Name of your virtual network where you want to create your database.                                                     |
-| module.mysql       | subnet_name                                   | string | The name of the subnet for the MySQL database.                                                     |
-| module.mysql       | dns_zone_virtual_network_link_name            | string | The name of the DNS zone virtual network link.                                                     |
-| module.mysql       | create_mysql_fs                               | bool   | A flag to indicate whether to create the MySQL file server.                                        |
-| module.mysql       | administrator_login                           | string | The administrator login for the MySQL database.                                                    |
-| module.mysql       | administrator_password                        | string | The administrator password for the MySQL database.                                                 |
-| module.mysql       | db_names                                      | list   | The list of database names for the MySQL database.                                                 |
-| module.mysql       | backup_retention_days                         | number | The number of days to retain backups for the MySQL database.                                       |
-| module.mysql       | create_mode                                   | string | The creation mode for the MySQL database.                                                          |
-| module.mysql       | private_dns_zone_mysql_fs_name                | string | The name of the private DNS zone for the MySQL flexible server.                                        |
-| module.mysql       | mysql_fs_server_name                          | string | The name of the MySQL flexible server.                                                                 |
-| module.mysql       | auto_grow_enabled                             | bool   | A flag to indicate whether auto-grow is enabled for the MySQL database.                            |
-| module.mysql       | iops                                          | number | The number of IOPS for the MySQL database.                                                         |
-| module.mysql       | mysql_sku_name                                | string | The SKU name for MySQL.                                                                            |
-| module.mysql       | storagesize_gb                                | number | The storage size in GB for the MySQL database.                                                     |
-| module.mysql       | geo_redundant_backup_enabled                  | bool   | A flag to indicate whether geo-redundant backup is enabled for the MySQL database.                 |
-| module.mysql       | zone                                          | string | The availability zone for the MySQL database.                                                      |
-| module.mysql       | mysql_fs_db_charset                           | string | The charset for the MySQL flexible server database.                                                    |
-| module.mysql       | mysql_fs_db_collation                         | string | The collation for the MySQL flexible server database.                                                  |
-| module.mysql       | firewall_rule_name                            | string | The name of the firewall rule for the MySQL database.                                             |
-| module.mysql       | start_ip                                      | string | The start IP address for the firewall rule for the MySQL database.                                 |
-| module.mysql       | end_ip                                        | string | The end IP address for the firewall rule for the MySQL database.                                   |
-| module.mysql       | server_configuration_name                     | string | The name of the server configuration for the MySQL database.                                      |
-| module.mysql       | value                                         | string | The value for the server configuration for the MySQL database.                                    |
-| module.Postgresql  | create_postgresql_fs                          | bool   | A flag to indicate whether to create the PostgreSQL flexible server.                                   |
-| module.Postgresql  | administrator_login                           | string | The administrator login for the PostgreSQL database.                                               |
-| module.Postgresql  | administrator_password                        | string | The administrator password for the PostgreSQL database.                                            |
-| module.Postgresql  | backup_retention_days                         | number | The number of days to retain backups for the PostgreSQL database.                                  |
-| module.Postgresql  | create_mode                                   | string | The creation mode for the PostgreSQL database.                                                     |
-| module.Postgresql  | high_availability_mode                        | string | The high availability mode for the PostgreSQL database.                                            |
-| module.Postgresql  | private_dns_zone_postgresql_fs_name           | string | The name of the private DNS zone for the PostgreSQL flexible server.                                   |
-| module.Postgresql  | fs_server_name                                | string | The name of the PostgreSQL flexible server.                                                            |
-| module.Postgresql  | fs_server_version                             | string | The version of the PostgreSQL flexible server.                                                         |
-| module.Postgresql  | fs_storage_mb                                 | number | The storage size in MB for the PostgreSQL database.                                                |
-| module.Postgresql  | fs_sku_name                                   | string | The SKU name for the PostgreSQL flexible server.                                                       |
-| module.Postgresql  | fs_db_names                                   | list   | The list of database names for the PostgreSQL database.                                            |
-| module.Postgresql  | fs_db_collation                               | string | The collation for the PostgreSQL flexible server database.                                             |
-| module.Postgresql  | fs_db_charset                                 | string | The charset for the PostgreSQL flexible server database.                                               |
-| module.mariadb     | create_mariadb                                | bool   | A flag to indicate whether to create the MariaDB database.                                         |
-| module.mariadb     | mariadb_sku                                   | string | The SKU for MariaDB.                                                                               |
-| module.mariadb     | mariadb_storage_mb                            | number | The storage size in MB for MariaDB.                                                                 |
-| module.mariadb     | mariadb_version                               | string | The version of MariaDB.                                                                            |
-| module.mariadb     | private_endpoint_network_policies_enabled    | bool   | A flag to indicate whether private endpoint network policies are enabled for MariaDB.             |
-| module.mariadb     | private_service_connection_name              | string | The name of the private service connection for MariaDB.                                           |
-| module.mariadb     | private_service_connection_is_manual_connection | bool | A flag to indicate whether the private service connection for MariaDB is manual.                   |
-| module.mariadb     | private_service_connection_subresource_names | list   | The list of subresource names for the private service connection for MariaDB.                      |
-| module.mariadb     | private_dns_zone_name    | string | The name of the private DNS zone for MariaDB.                                                      |
-| module.mariadb     | server-name                                   | string | The name of the MariaDB server.                                                                    |
-| module.mariadb     | administrator_login                           | string | The administrator login for MariaDB.                                                               |
-| module.mariadb     | administrator_password                        | string | The administrator password for MariaDB.                                                            |
-| module.mariadb     | auto_grow_enabled                             | bool   | A flag to indicate whether auto-grow is enabled for MariaDB.                                       |
-| module.mariadb     | backup_retention_days                         | number | The number of days to retain backups for MariaDB.                                                  |
-| module.mariadb     | mariadb_geo_redundant_backup_enabled          | bool   | A flag to indicate whether geo-redundant backup is enabled for MariaDB.                           |
-| module.mariadb     | public_network_access_enabled                 | bool   | A flag to indicate whether public network access is enabled for MariaDB.                          |
-| module.mariadb     | ssl_enforcement_enabled                       | bool   | A flag to indicate whether SSL enforcement is enabled for MariaDB.                                 |
-| module.mariadb     | ssl_minimal_tls_version_enforced              | string | The minimal TLS version enforced for MariaDB.                                                      |
-| module.mariadb     | db-name                                       | string | The name of the database for MariaDB.                                                              |
-| module.mariadb     | databases_charset                             | string | The charset for the databases in MariaDB.                                                          |
-| module.mariadb     | databases_collation                           | string | The collation for the databases in MariaDB.                                                        |
 
+
+### MySQL Flexible Server Configuration
+
+| Variable Name                   | Description                                           | Example Value               |
+| --------------------------------| ------------------------------------------------------| ----------------------------|
+| create_mysql_fs                 | Set to `true` to create MySQL Flexible Server.       | `true`                      |
+| mysql_fs_server_name            | Name for the MySQL Flexible Server.                   | `"my-mysql-server"`         |
+| resource_group_name             | Name of the Azure resource group.                     | `"my-resource-group"`       |
+| location                        | Azure region for deployment.                          | `"East US"`                 |
+| administrator_login             | Administrator login for MySQL Server.                 | `"myadmin"`                 |
+| administrator_password          | Administrator password for MySQL Server.             | `"MyP@ssw0rd123"`           |
+| mysql_sku_name                  | SKU name for the MySQL Flexible Server.              | `"GP_Gen5_2"`               |
+| backup_retention_days           | Number of days to retain backups.                    | `7`                         |
+| create_mode                     | MySQL Server creation mode.                          | `"Default"`                 |
+| auto_grow_enabled               | Enable auto-grow for storage.                        | `true`                      |
+| iops                            | Input/Output Operations Per Second (IOPS) for storage. | `1000`                     |
+| storagesize_gb                  | Size of storage in gigabytes.                       | `64`                        |
+| geo_redundant_backup_enabled    | Enable geo-redundant backups.                        | `true`                      |
+| zone                            | Azure Availability Zone for deployment.              | `1`                         |
+
+### MySQL Database Configuration
+
+| Variable Name                   | Description                                           | Example Value               |
+| --------------------------------| ------------------------------------------------------| ----------------------------|
+| create_mysql_fs                 | Set to `true` to create MySQL Database.               | `true`                      |
+| db_names                        | Name for the MySQL Database.                         | `"my-database"`             |
+| mysql_fs_db_charset             | Charset for the MySQL Database.                      | `"utf8mb4"`                 |
+| mysql_fs_db_collation           | Collation for the MySQL Database.                    | `"utf8mb4_unicode_ci"`      |
+
+Note: Please refer to the module documentation for additional optional variables and their descriptions.
+
+https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mysql_flexible_server
+
+### PostgreSQL Flexible Server Configuration
+
+| Variable Name                   | Description                                           | Example Value               |
+| --------------------------------| ------------------------------------------------------| ----------------------------|
+| create_postgresql_fs            | Set to `true` to create PostgreSQL Flexible Server.  | `true`                      |
+| fs_server_name                  | Name for the PostgreSQL Flexible Server.              | `"my-postgresql-server"`    |
+| resource_group_name             | Name of the Azure resource group.                     | `"my-resource-group"`       |
+| location                        | Azure region for deployment.                          | `"East US"`                 |
+| fs_server_version               | Version of PostgreSQL Server.                         | `"11"`                      |
+| administrator_login             | Administrator login for PostgreSQL Server.            | `"myadmin"`                 |
+| administrator_password          | Administrator password for PostgreSQL Server.        | `"MyP@ssw0rd123"`           |
+| fs_storage_mb                   | Storage size in megabytes.                           | `51200`                     |
+| fs_sku_name                     | SKU name for PostgreSQL Flexible Server.             | `"Standard_D2s_v3"`         |
+| backup_retention_days           | Number of days to retain backups.                    | `7`                         |
+| create_mode                     | PostgreSQL Server creation mode.                     | `"Default"`                 |
+| high_availability_mode          | High availability mode for PostgreSQL Server.         | `"Enable"`                  |
+
+### PostgreSQL Database Configuration
+
+| Variable Name                   | Description                                           | Example Value               |
+| --------------------------------| ------------------------------------------------------| ----------------------------|
+| create_postgresql_fs            | Set to `true` to create PostgreSQL Database.          | `true`                      |
+| fs_db_names                     | Name for the PostgreSQL Database.                     | `"my-database"`             |
+| fs_db_collation                 | Collation for the PostgreSQL Database.               | `"en_US.UTF-8"`             |
+| fs_db_charset                   | Charset for the PostgreSQL Database.                 | `"UTF8"`                    
+
+
+Note: Please refer to the module documentation for additional optional variables and their descriptions.
+
+https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server
+
+### Private Endpoint Configuration
+
+| Variable Name                   | Description                                           | Example Value                |
+| --------------------------------| ------------------------------------------------------| -----------------------------|
+| create_mariadb                  | Set to `true` to create MariaDB resources.            | `true`                       |
+| server-name                     | Name for the MariaDB server.                          | `"my-mariadb-server"`        |
+| location                        | Azure region for deployment.                          | `"East US"`                  |
+| resource_group_name             | Name of the Azure resource group.                     | `"my-resource-group"`        |
+| private_service_connection_name  | Name for the private service connection.              | `"my-private-connection"`    |
+| private_service_connection_is_manual_connection | Set to `true` for manual connection.     | `true`              |
+| private_service_connection_subresource_names | List of subresource names for the connection. | `["db", "admin"]`     |
+
+### MariaDB Server Configuration
+
+| Variable Name                   | Description                                           | Example Value                |
+| --------------------------------| ------------------------------------------------------| -----------------------------|
+| mariadb_sku                     | SKU name for MariaDB server.                         | `"GP_Gen5_2"`                |
+| mariadb_version                 | Version of MariaDB Server.                          | `"10.3"`                     |
+| mariadb_storage_mb              | Storage size in megabytes.                          | `51200`                      |
+| administrator_login             | Administrator login for MariaDB Server.             | `"myadmin"`                  |
+| administrator_password          | Administrator password for MariaDB Server.         | `"MyP@ssw0rd123"`            |
+| auto_grow_enabled               | Set to `true` to enable auto-grow.                  | `true`                       |
+| backup_retention_days           | Number of days to retain backups.                   | `7`                          |
+| mariadb_geo_redundant_backup_enabled | Enable geo-redundant backups.                    | `true`                       |
+| public_network_access_enabled    | Set to `true` to enable public network access.      | `true`                       |
+| ssl_enforcement_enabled         | Enable SSL enforcement.                             | `true`                       |
+| ssl_minimal_tls_version_enforced | Minimal TLS version for SSL enforcement.            | `"TLS1_2"`                   |
+
+### MariaDB Database Configuration
+
+| Variable Name                   | Description                                           | Example Value                |
+| --------------------------------| ------------------------------------------------------| -----------------------------|
+| create_mariadb_database         | Set to `true` to create MariaDB Database.           | `true`                       |
+| db-name                         | Name for the MariaDB Database.                      | `"my-database"`              |
+| databases_charset               | Charset for the MariaDB Database.                   | `"UTF8"`                     |
+| databases_collation             | Collation for the MariaDB Database.                 | `"en_US.UTF-8"`              |
 
 Note: Please refer to the module documentation for additional optional variables and their descriptions.
 
@@ -114,11 +156,15 @@ https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources
 | mariadb_fqdn  | Fully Qualified Domain Name (FQDN) for the MariaDB server.    |
 
 
+Note: Please refer to the module documentation for additional optional variables and their descriptions.
+
+https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mariadb_server
+
 ## Note
 
-Make sure to provide the necessary values for the input variables and adjust the module source paths accordingly.
+Make sure to provide the necessary values for the input variables and adjust the module accordingly.
 
-Please refer to the documentation of each individual module for more details on their usage and specific input variables.
+Please refer to the documentation of each individual resource for more details on their usage and specific input variables.
 
 
 ## Authors

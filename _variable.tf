@@ -26,7 +26,7 @@ variable "common_tags" {
 variable "resource_group_name" {
   description = "The name of the Azure Resource Group where the resources will be created."
   type        = string
-  default     = "kjnvjnvne_group"
+  default     = "rg"
 }
 
 variable "location" {
@@ -38,14 +38,14 @@ variable "location" {
 variable "subnet_name" {
   description = "name of the subnet"
   type        = string
-  default     = "db-subnet"
+  default     = "mariadb-subnet"
 }
 
 
 variable "vnet_name" {
   description = "name of the virtual network"
   type = string
-  default = "vnet"
+  default = "vnet1"
 }
 
 
@@ -54,6 +54,13 @@ variable "dns_zone_virtual_network_link_name" {
     type        = string
     default     = "vnet-private-zone-link"
 }
+
+variable "private_dns_zone_name" {
+    description = "The name of the private DNS zone for the MySQL Flexible Server."
+    type        = string
+    default     = "mydb.database.azure.com"
+}
+
 
 variable "create_mysql_fs" {
     description = "A boolean flag to determine whether to create the MySQL Flexible Server resources or not."
@@ -70,7 +77,7 @@ variable "create_postgresql_fs" {
 variable "create_mariadb" {
     description = "A boolean flag to determine whether to create the MariaDB resources or not."
     type        = bool
-    default     = true
+    default     = false
 }
 
 ########################################################################################################################################
@@ -145,12 +152,6 @@ variable "public_network_access_enabled" {
 ####                         MYSQL FLEXIBLE SERVER                                ####
 ######################################################################################
 
-variable "private_dns_zone_mysql_fs_name" {
-    description = "The name of the private DNS zone for the MySQL Flexible Server."
-    type        = string
-    default     = "example.mysql.database.azure.com"
-}
-
 variable "value" {
   description = " Specifies the value of the MySQL Configuration. See the MySQL documentation for valid values. Changing this forces a new resource to be created."
   type        = string
@@ -193,8 +194,6 @@ variable "iops" {
     type        = string
     default     = "10000"
 }
-
-
 
 variable "mysql_fs_server_name" {
   description = "Specifies the name of the PostgreSQL Server. Changing this forces a new resource to be created."
@@ -247,12 +246,6 @@ variable "server_configuration_name" {
 ######################################################################################
 ####                         POSTGRESQL FLEXIBLE SERVER                           ####
 ######################################################################################
-
-variable "private_dns_zone_postgresql_fs_name" {
-    description = "The name of the private DNS zone for the PostgreSQL Flexible Server."
-    type        = string
-    default     = "example.postgres.database.azure.com"
-}
 
 variable "high_availability_mode" {
     description = "The high availability mode for the PostgreSQL Flexible Server."
@@ -330,12 +323,6 @@ variable "private_service_connection_subresource_names" {
     description = "The list of subresource names for the private service connection."
     type        = list(string)
     default     = ["mariadbServer"]
-}
-
-variable "mariadb_private_dns_zone_name" {
-    description = "The name of the private DNS zone for the MariaDB server."
-    type        = string
-    default     = "privatelink.mariadb.database.azure.com"
 }
 
 variable "server-name" {

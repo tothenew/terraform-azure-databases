@@ -2,28 +2,10 @@
 ####                         MYSQL FLEXIBLE SERVER                                ####
 ######################################################################################
 
-resource "azurerm_private_dns_zone" "private_dns_zone" {
-  count               = var.create_mysql_fs ? 1 : 0
-  name                = var.private_dns_zone_mysql_fs_name
-  resource_group_name = var.resource_group
-
-    tags = var.tags
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "dns_vnet_link" {
-  count                 = var.create_mysql_fs ? 1 : 0
-  name                  = var.dns_zone_virtual_network_link_name
-  private_dns_zone_name = azurerm_private_dns_zone.private_dns_zone[0].name
-  virtual_network_id    = var.vnet_id
-  resource_group_name   = var.resource_group
-
-  tags                 = var.tags
-}
-
 resource "azurerm_mysql_flexible_server" "mysql_flexible_server" {
   count                  = var.create_mysql_fs ? 1 : 0
   name                   = var.mysql_fs_server_name
-  resource_group_name    = var.resource_group
+  resource_group_name    = var.resource_group_name
   location               = var.location
   administrator_login    = var.administrator_login
   administrator_password = var.administrator_password
@@ -32,7 +14,7 @@ resource "azurerm_mysql_flexible_server" "mysql_flexible_server" {
   create_mode            = var.create_mode
 
 
-  delegated_subnet_id    = var.subnet_id
+  delegated_subnet_id    = data.azurerm_subnet.db_subnet.id
   private_dns_zone_id    = azurerm_private_dns_zone.private_dns_zone[count.index].id
 
  depends_on = [azurerm_private_dns_zone_virtual_network_link.dns_vnet_link]
@@ -45,13 +27,13 @@ resource "azurerm_mysql_flexible_server" "mysql_flexible_server" {
     geo_redundant_backup_enabled = var.geo_redundant_backup_enabled
     zone                         = var.zone
     
-  tags                 = var.tags
+  tags                         = merge(local.common_tags, tomap({ "Name" : local.project_name_prefix }))
 }
 
 resource "azurerm_mysql_flexible_database" "mysql_database" {
   count               = var.create_mysql_fs ? 1 : 0
   name                = var.db_names
-  resource_group_name = var.resource_group
+  resource_group_name = var.resource_group_name
   server_name         = azurerm_mysql_flexible_server.mysql_flexible_server[count.index].name
   charset             = var.mysql_fs_db_charset
   collation           = var.mysql_fs_db_collation
