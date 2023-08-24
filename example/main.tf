@@ -7,7 +7,7 @@ resource "random_password" "passwd" {
 }
 
 module "database_main" {
-  source = "git::https://github.com/gauravnegi01/terraform-azure-databases.git?ref=database-v1"
+  source = "git::https://github.com/tothenew/terraform-azure-databases.git?ref=database-v1"
 
   create_mysql_fs      = true
   create_postgresql_fs = false
@@ -15,11 +15,12 @@ module "database_main" {
 
   project_name_prefix = "database"
 
-  resource_group_name = "kjnvjnvne_group"
-  location            = "West US"
-  vnet_name           = "vnet1"
+  resource_group_name = "rg"
+  location            = "EAST US 2"
+  vnet_name           = "vnet"
   subnet_name         = "db-subnet"
 
+  administrator_login    = "admin"
   administrator_password = element(concat(random_password.passwd.*.result, [""]), 0)
 }
 

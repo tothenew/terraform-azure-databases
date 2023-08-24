@@ -26,26 +26,26 @@ variable "common_tags" {
 variable "resource_group_name" {
   description = "The name of the Azure Resource Group where the resources will be created."
   type        = string
-  default     = "kjnvjnvne_group"
+  default     = "rg"
 }
 
 variable "location" {
   description = "The Azure region where the resources will be deployed. E.g., 'East US', 'West Europe', etc."
   type        = string
-  default     = "West US"
+  default     = "EAST US 2"
 }
 
 variable "subnet_name" {
   description = "name of the subnet"
   type        = string
-  default     = "mariadb-subnet"
+  default     = "db-subnet"
 }
 
 
 variable "vnet_name" {
   description = "name of the virtual network"
   type        = string
-  default     = "vnet1"
+  default     = "vnet"
 }
 
 
@@ -77,7 +77,7 @@ variable "create_postgresql_fs" {
 variable "create_mariadb" {
   description = "A boolean flag to determine whether to create the MariaDB resources or not."
   type        = bool
-  default     = true
+  default     = false
 }
 
 ########################################################################################################################################
