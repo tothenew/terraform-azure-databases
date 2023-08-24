@@ -5,7 +5,7 @@ resource "azurerm_private_endpoint" "private_endpoint" {
   resource_group_name = var.resource_group_name
   subnet_id           = data.azurerm_subnet.db_subnet.id
 
-  tags                         = merge(local.common_tags, tomap({ "Name" : local.project_name_prefix }))
+  tags = merge(local.common_tags, tomap({ "Name" : local.project_name_prefix }))
 
   private_service_connection {
     name                           = var.private_service_connection_name
@@ -16,17 +16,17 @@ resource "azurerm_private_endpoint" "private_endpoint" {
 }
 
 resource "azurerm_mariadb_server" "mariadb_server" {
-  count                            = var.create_mariadb ? 1 : 0
-  name                             = var.server-name
-  location                         = var.location
-  resource_group_name              = var.resource_group_name
+  count               = var.create_mariadb ? 1 : 0
+  name                = var.server-name
+  location            = var.location
+  resource_group_name = var.resource_group_name
 
-  administrator_login              = var.administrator_login
-  administrator_login_password     = var.administrator_password
+  administrator_login          = var.administrator_login
+  administrator_login_password = var.administrator_password
 
-  sku_name                         = var.mariadb_sku
-  storage_mb                       = var.mariadb_storage_mb
-  version                          = var.mariadb_version
+  sku_name   = var.mariadb_sku
+  storage_mb = var.mariadb_storage_mb
+  version    = var.mariadb_version
 
   auto_grow_enabled                = var.auto_grow_enabled
   backup_retention_days            = var.backup_retention_days
@@ -35,7 +35,7 @@ resource "azurerm_mariadb_server" "mariadb_server" {
   ssl_enforcement_enabled          = var.ssl_enforcement_enabled
   ssl_minimal_tls_version_enforced = var.ssl_minimal_tls_version_enforced
 
-  tags                         = merge(local.common_tags, tomap({ "Name" : local.project_name_prefix }))
+  tags = merge(local.common_tags, tomap({ "Name" : local.project_name_prefix }))
 }
 
 resource "azurerm_mariadb_database" "mariadb_database" {

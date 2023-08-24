@@ -13,6 +13,7 @@ Before you begin, ensure you have the following requirements met:
 
 2. Azure CLI installed and configured with appropriate access rights. You can install the Azure CLI from [https://docs.microsoft.com/en-us/cli/azure/install-azure-cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
 
+
 ### Input Variables
 
 Supports the following input variables:

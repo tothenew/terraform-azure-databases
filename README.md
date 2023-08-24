@@ -1,12 +1,18 @@
 # terraform-azure-databases 
 
-[![Lint Status](https://github.com/tothenew/terraform-azure-databases/workflows/Lint/badge.svg)](https://github.com/tothenew/terraform-aws-template/actions)
-[![LICENSE](https://img.shields.io/github/license/tothenew/terraform-azure-databases )](https://github.com/tothenew/terraform-aws-template/blob/master/LICENSE)
+[![Lint Status](https://github.com/tothenew/terraform-aws-template/workflows/Lint/badge.svg)](https://github.com/tothenew/terraform-aws-template/actions)
+[![LICENSE](https://img.shields.io/github/license/tothenew/terraform-aws-template)](https://github.com/tothenew/terraform-aws-template/blob/master/LICENSE)
 
 This module sets up different types of databases in Azure, including 
 - MYSQL flexible server 
 - PostgreSQL flexible server
 - MariaDB server
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_Azure"></a> [azurerm](#provider\_azure) | >=3.0 |
 
 ## Prerequisites
 
@@ -38,9 +44,10 @@ Before you begin, ensure you have the following requirements met:
 
 | Module Name       | Variable Name                                 | Type   | Description                                                                                        |
 |-------------------|-----------------------------------------------|--------|----------------------------------------------------------------------------------------------------|
-| locals               | project                                       | string | The name of the project.                                                                           |
+| locals               | project_name_prefix                                       | string | The name of the project.                                                                           |
 | data.azurerm_resource_group | resource_group_name                           | string | The name of your resource group that is already .created .                                                       |
-| "azurerm_virtual_network"  | vnet_name                                     | string | The Name of your virtual network where you want to create your database.                                                     |
+| data.azurerm_virtual_network  | vnet_name                                     | string | The Name of your existing virtual network  .                                                     |
+| data.azurerm_subnet  | subnet_name                                    | string | The Name of your database subnet where you want to create your database.                                                     |
 
 
 ### MySQL Flexible Server Configuration
