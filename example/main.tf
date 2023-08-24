@@ -7,7 +7,7 @@ resource "random_password" "passwd" {
 }
 
 module "database_main" {
-  source = "git::https://github.com/tothenew/terraform-azure-databases.git?ref=database-v1"
+  source = "git::https://github.com/tothenew/terraform-azure-databases.git"
 
   create_mysql_fs      = true
   create_postgresql_fs = false
