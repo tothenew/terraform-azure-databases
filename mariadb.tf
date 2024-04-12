@@ -3,7 +3,7 @@ resource "azurerm_private_endpoint" "private_endpoint" {
   name                = format("%s-private-endpoint", var.server-name)
   location            = var.location
   resource_group_name = var.resource_group_name
-  subnet_id           = data.azurerm_subnet.db_subnet.id
+  subnet_id           = data.azurerm_subnet.db_subnet[count.index].id
 
   tags = merge(local.common_tags, tomap({ "Name" : local.project_name_prefix }))
 

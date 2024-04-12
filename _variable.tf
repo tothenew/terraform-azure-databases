@@ -1,14 +1,13 @@
 variable "project_name_prefix" {
   description = "Used in tags cluster and nodes"
   type        = string
-  default     = "azure_database"
+  default     = "dev"
 }
 
 variable "default_tags" {
   type        = map(string)
   description = "A map to add common tags to all the resources"
   default = {
-    "Scope" : "database"
     "CreatedBy" : "Terraform"
   }
 }
@@ -26,26 +25,26 @@ variable "common_tags" {
 variable "resource_group_name" {
   description = "The name of the Azure Resource Group where the resources will be created."
   type        = string
-  default     = "rg"
+  default     = "gaurav"
 }
 
 variable "location" {
   description = "The Azure region where the resources will be deployed. E.g., 'East US', 'West Europe', etc."
   type        = string
-  default     = "EAST US 2"
+  default     = "Central India"
 }
 
 variable "subnet_name" {
   description = "name of the subnet"
   type        = string
-  default     = "db-subnet"
+  default     = "database_subnet"
 }
 
 
 variable "vnet_name" {
   description = "name of the virtual network"
   type        = string
-  default     = "vnet"
+  default     = "my-vnet"
 }
 
 
@@ -71,11 +70,17 @@ variable "create_mysql_fs" {
 variable "create_postgresql_fs" {
   description = "A boolean flag to determine whether to create the PostgreSQL Flexible Server resources or not."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "create_mariadb" {
   description = "A boolean flag to determine whether to create the MariaDB resources or not."
+  type        = bool
+  default     = false
+}
+
+variable "is_public" {
+  description = "to create mysql or postgresql server as publuc or not"
   type        = bool
   default     = false
 }
@@ -94,25 +99,6 @@ variable "administrator_password" {
   sensitive   = true
   default     = "123qwe!@#"
 }
-
-variable "db_charset" {
-  description = "Specifies the Charset for the Database, which needs to be a valid Charset. Changing this forces a new resource to be created."
-  type        = string
-  default     = "UTF8"
-}
-
-variable "db_collation" {
-  description = "Specifies the Collation for the Database, which needs to be a valid Collation. Note that Microsoft uses different notation - en-US instead of en_US. Changing this forces a new resource to be created."
-  type        = string
-  default     = "English_United States.1252"
-}
-
-variable "db_names" {
-  description = "The list of names of the Database, which needs to be a valid identifier. Changing this forces a new resource to be created."
-  type        = string
-  default     = "my_db"
-}
-
 
 variable "auto_grow_enabled" {
   description = "(Optional) Enable or disable incremental automatic growth of database space. Storage auto-grow prevents your server from running out of storage and becoming read-only. If storage auto grow is enabled, the storage automatically grows without impacting the workload. The default value if not explicitly specified is `true`."
@@ -152,29 +138,6 @@ variable "public_network_access_enabled" {
 ####                         MYSQL FLEXIBLE SERVER                                ####
 ######################################################################################
 
-variable "value" {
-  description = " Specifies the value of the MySQL Configuration. See the MySQL documentation for valid values. Changing this forces a new resource to be created."
-  type        = string
-  default     = "600"
-}
-
-variable "start_ip" {
-  description = "Specifies the Start IP Address associated with this Firewall Rule."
-  type        = string
-  default     = "0.0.0.0"
-}
-
-variable "end_ip" {
-  description = "Specifies the End IP Address associated with this Firewall Rule. "
-  type        = string
-  default     = "0.0.0.0"
-}
-
-variable "firewall_rule_name" {
-  description = "Specifies the name of the MySQL Firewall Rule. "
-  type        = string
-  default     = "office"
-}
 
 variable "zone" {
   description = "The zone for the MySQL Flexible Server."
@@ -183,52 +146,50 @@ variable "zone" {
 
 }
 
-variable "storagesize_gb" {
-  description = "The storage size in GB for the MySQL Flexible Server."
-  type        = number
-  default     = 128
+variable "storage" {
+  description = "Map of the storage configuration"
+  type = object({
+    auto_grow_enabled = optional(bool)
+    iops              = optional(number)
+    size_gb           = optional(number)
+  })
+  default = null
+  # {
+  #     auto_grow_enabled =  true
+  #     iops              =  360
+  #     size_gb           =  20
+  # }
 }
 
-variable "iops" {
-  description = "The storage IOPS (Input/Output Operations Per Second) for the MySQL Flexible Server."
-  type        = string
-  default     = "10000"
+variable "high_availability" {
+  description = "Map of high availability configuration: https://docs.microsoft.com/en-us/azure/mysql/flexible-server/concepts-high-availability. `null` to disable high availability"
+  type = object({
+    mode                      = string
+    standby_availability_zone = optional(number)
+  })
+  default = null
+  # {
+  #   mode                      = "SameZone"
+  #   standby_availability_zone = 1
+  # }
+}
+
+variable "maintenance_window" {
+  description = "Map of maintenance window configuration: https://docs.microsoft.com/en-us/azure/mysql/flexible-server/concepts-maintenance"
+  type        = map(number)
+  default     = null
 }
 
 variable "mysql_fs_server_name" {
-  description = "Specifies the name of the PostgreSQL Server. Changing this forces a new resource to be created."
+  description = "Specifies the name of the MySQL Server. Changing this forces a new resource to be created."
   type        = string
-  default     = "example-fs-server"
+  default     = "terraform-test-mysql-server"
 }
 
-variable "sql_fs_server_version" {
-  description = "Specifies the version of PostgreSQL to use. Valid values are `9.5`, `9.6`, `10.0`, `10.2` and `11`. Changing this forces a new resource to be created."
+variable "mysql_fs_server_version" {
+  description = "The version of the MySQL Flexible Server to use. Possible values are 5.7, and 8.0.21. Changing this forces a new resource to be created."
   type        = string
-  default     = "12"
-}
-
-variable "sql_fs_storage_mb" {
-  description = "Max storage allowed for a server. Possible values are between 5120 MB(5GB) and 1048576 MB(1TB) for the Basic SKU and between 5120 MB(5GB) and 4194304 MB(4TB) for General Purpose/Memory Optimized SKUs."
-  type        = number
-  default     = 32768
-}
-
-variable "sql_fs_sku_name" {
-  description = "The SKU (Stock Keeping Unit) name for the MySQL Flexible Server."
-  type        = string
-  default     = "GP_Standard_D4s_v3"
-}
-
-variable "mysql_fs_db_charset" {
-  description = "Specifies the Charset for the PostgreSQL Database, which needs to be a valid PostgreSQL Charset. Changing this forces a new resource to be created."
-  type        = string
-  default     = "UTF8"
-}
-
-variable "mysql_fs_db_collation" {
-  description = "Specifies the Collation for the PostgreSQL Database, which needs to be a valid PostgreSQL Collation. Note that Microsoft uses different notation - en-US instead of en_US. Changing this forces a new resource to be created."
-  type        = string
-  default     = "utf8_unicode_ci"
+  default     = "8.0.21"
 }
 
 variable "mysql_sku_name" {
@@ -237,66 +198,160 @@ variable "mysql_sku_name" {
   default     = "B_Standard_B1s"
 }
 
-variable "server_configuration_name" {
-  description = "Specifies the name of the MySQL Configuration, which needs to be a valid MySQL configuration name. Changing this forces a new resource to be created."
-  type        = string
-  default     = "interactive_timeout"
+variable "mysql_databases" {
+  description = "Map of MySQL database configurations"
+  type = map(object({
+    charset   = string
+    collation = string
+  }))
+  default = {
+    # database_1 = {
+    #   charset   = "utf8"
+    #   collation = "utf8_general_ci"
+    # }
+    # database_2 = {
+    #   charset   = "utf8mb4"
+    #   collation = "utf8mb4_general_ci"
+    # }
+  }
+}
+
+variable "server_configurations" {
+  description = "Map of MySQL server configurations"
+  type = map(object({
+    value               = string
+  }))
+  default = {
+    # interactive_timeout = {
+    #   value               = "600"
+    # }
+    # require_secure_transport = {
+    #   value               = "ON"
+    # }
+  }
+}
+
+variable "allowed_cidrs" {
+  description = "Map of authorized CIDRs"
+  type        = map(object({
+      start_ip_address = string
+      end_ip_address  = string
+}))
+  default     = {
+    # office = {
+    #   start_ip_address = "61.12.91.218"
+    #   end_ip_address  = "61.12.91.218"
+    # }
+  }
 }
 
 ######################################################################################
 ####                         POSTGRESQL FLEXIBLE SERVER                           ####
 ######################################################################################
 
-variable "high_availability_mode" {
-  description = "The high availability mode for the PostgreSQL Flexible Server."
-  type        = string
-  default     = "SameZone"
+variable "postgres_zone" {
+  description = "Specify availability-zone for PostgreSQL Flexible main Server."
+  type        = number
+  default     = 1
+
 }
 
-variable "fs_server_name" {
+variable "postgres_storage_tier" {
+  description = " The name of storage performance tier for IOPS of the PostgreSQL Flexible Server."
+  type = string
+  default =  null
+}
+
+variable "postgres_server_name" {
   description = "Specifies the name of the PostgreSQL Server. Changing this forces a new resource to be created."
   type        = string
   default     = "postgresqlfs-server"
 }
 
-variable "fs_server_version" {
+variable "postgres_server_version" {
   description = "Specifies the version of PostgreSQL to use. Valid values are `9.5`, `9.6`, `10.0`, `10.2` and `11`. Changing this forces a new resource to be created."
   type        = string
-  default     = "12"
+  default     = "16"
 }
 
-variable "fs_storage_mb" {
+variable "postgres_storage_mb" {
   description = "Max storage allowed for a server. Possible values are between 5120 MB(5GB) and 1048576 MB(1TB) for the Basic SKU and between 5120 MB(5GB) and 4194304 MB(4TB) for General Purpose/Memory Optimized SKUs."
   type        = number
   default     = 32768
 }
 
-variable "fs_sku_name" {
+variable "postgres_sku_name" {
   type    = string
   default = "GP_Standard_D4s_v3"
 }
 
 
-variable "fs_db_names" {
-  description = "The list of names of the PostgreSQL Database, which needs to be a valid PostgreSQL identifier. Changing this forces a new resource to be created."
-  type        = string
-  default     = "postgresql_db"
-}
-
-variable "fs_db_charset" {
-  description = "Specifies the Charset for the PostgreSQL Database, which needs to be a valid PostgreSQL Charset. Changing this forces a new resource to be created."
-  type        = string
-  default     = "UTF8"
-}
-
-variable "fs_db_collation" {
-  description = "Specifies the Collation for the PostgreSQL Database, which needs to be a valid PostgreSQL Collation. Note that Microsoft uses different notation - en-US instead of en_US. Changing this forces a new resource to be created."
-  type        = string
-  default     = "en_US.utf8"
+variable "postgres_high_availability" {
+  description = "Map of high availability configuration: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server. `null` to disable high availability"
+  type = object({
+    mode                      = string
+    standby_availability_zone = optional(number)
+  })
+  default = null
+  # {
+  #   mode                      = "SameZone"
+  #   standby_availability_zone = 1
+  # }
 }
 
 
+variable "postgres_maintenance_window" {
+  description = "Map of maintenance window configuration: https://docs.microsoft.com/en-us/azure/mysql/flexible-server/concepts-maintenance"
+  type        = map(number)
+  default     = null
+}
 
+variable "postgres_databases" {
+  description = "Map of MySQL database configurations"
+  type = map(object({
+    charset   = string
+    collation = string
+  }))
+  default = {
+    database_1 = {
+      charset   = "utf8"
+      collation = "en_US.utf8"
+    }
+    database_2 = {
+      charset   = "utf8"
+      collation = "en_US.utf8"
+    }
+  }
+}
+
+variable "postgres_server_configurations" {
+  description = "PostgreSQL configurations to enable."
+   type = map(object({
+    value               = string
+  }))
+  default = {
+    # backslash_quote = {
+    #   value               = "on"
+    # }
+    # require_secure_transport = {
+    #   value               = "ON"
+    # }
+  }
+}
+
+variable "postgres_firewall_rule" {
+  description = "Map of authorized CIDRs"
+  type        = map(object({
+      start_ip_address = string
+      end_ip_address  = string
+}))
+  default     = {
+    # office = {
+    #   start_ip_address = "61.12.91.218"
+    #   end_ip_address  = "61.12.91.218"
+    # }
+  }
+}
 ######################################################################################
 ####                         MARIADB SERVER                                       ####
 ######################################################################################
