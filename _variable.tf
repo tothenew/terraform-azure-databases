@@ -25,7 +25,7 @@ variable "common_tags" {
 variable "resource_group_name" {
   description = "The name of the Azure Resource Group where the resources will be created."
   type        = string
-  default     = "gaurav"
+  default     = null
 }
 
 variable "location" {
@@ -37,14 +37,14 @@ variable "location" {
 variable "subnet_name" {
   description = "name of the subnet"
   type        = string
-  default     = "database_subnet"
+  default     = null
 }
 
 
 variable "vnet_name" {
   description = "name of the virtual network"
   type        = string
-  default     = "my-vnet"
+  default     = null
 }
 
 
@@ -55,7 +55,7 @@ variable "dns_zone_virtual_network_link_name" {
 }
 
 variable "private_dns_zone_name" {
-  description = "The name of the private DNS zone for the MySQL Flexible Server."
+  description = "The name of the private DNS zone for the Database Server."
   type        = list(string)
   default     = ["mysql.mysql.database.azure.com", "psql.postgres.database.azure.com"]
 }
@@ -70,7 +70,7 @@ variable "create_mysql_fs" {
 variable "create_postgresql_fs" {
   description = "A boolean flag to determine whether to create the PostgreSQL Flexible Server resources or not."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "create_mariadb" {
@@ -97,13 +97,13 @@ variable "administrator_password" {
   description = "The Password associated with the administrator_login for the database Server."
   type        = string
   sensitive   = true
-  default     = "123qwe!@#"
+  default     = null
 }
 
 variable "auto_grow_enabled" {
   description = "(Optional) Enable or disable incremental automatic growth of database space. Storage auto-grow prevents your server from running out of storage and becoming read-only. If storage auto grow is enabled, the storage automatically grows without impacting the workload. The default value if not explicitly specified is `true`."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "backup_retention_days" {
@@ -128,7 +128,7 @@ variable "geo_redundant_backup_enabled" {
 
 
 variable "public_network_access_enabled" {
-  description = "Whether or not public network access is allowed for this server. Possible values are Enabled and Disabled."
+  description = "Whether or not public network access is allowed for mariadb server. Possible values are Enabled and Disabled."
   type        = bool
   default     = false
 }
@@ -265,7 +265,7 @@ variable "postgres_storage_tier" {
 variable "postgres_server_name" {
   description = "Specifies the name of the PostgreSQL Server. Changing this forces a new resource to be created."
   type        = string
-  default     = "postgresqlfs-server"
+  default     = null
 }
 
 variable "postgres_server_version" {
@@ -313,14 +313,14 @@ variable "postgres_databases" {
     collation = string
   }))
   default = {
-    database_1 = {
-      charset   = "utf8"
-      collation = "en_US.utf8"
-    }
-    database_2 = {
-      charset   = "utf8"
-      collation = "en_US.utf8"
-    }
+    # database_1 = {
+    #   charset   = "utf8"
+    #   collation = "en_US.utf8"
+    # }
+    # database_2 = {
+    #   charset   = "utf8"
+    #   collation = "en_US.utf8"
+    # }
   }
 }
 
