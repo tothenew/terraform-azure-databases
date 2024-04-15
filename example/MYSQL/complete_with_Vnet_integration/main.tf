@@ -51,7 +51,7 @@ module "database_main" {
 
   subnet_name         =  "database_subnet"
   vnet_name           =  "my-vnet"
-  private_dns_zone_name  = "mysql.mysql.database.azure.com"
+  private_dns_zone_name  = ["mysql.mysql.database.azure.com"]
   dns_zone_virtual_network_link_name = "vnet-private-zone-link"
 
 

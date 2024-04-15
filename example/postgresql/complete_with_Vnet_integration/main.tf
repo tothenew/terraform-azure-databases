@@ -53,7 +53,7 @@ module "database_main" {
   vnet_name           =  "my-vnet"
   
 # The private_dns_zone should end with suffix .postgres.database.azure.com
-  private_dns_zone_name  = "psql.postgres.database.azure.com"
+  private_dns_zone_name  = ["psql.postgres.database.azure.com"]
   dns_zone_virtual_network_link_name = "vnet-private-zone-link"
 
   create_postgresql_fs      = true
