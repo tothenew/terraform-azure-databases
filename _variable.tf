@@ -75,7 +75,7 @@ variable "create_mysql_fs" {
 variable "create_postgresql_fs" {
   description = "A boolean flag to determine whether to create the PostgreSQL Flexible Server resources or not."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "create_mariadb" {
@@ -188,7 +188,7 @@ variable "maintenance_window" {
 variable "mysql_fs_server_name" {
   description = "Specifies the name of the MySQL Server. Changing this forces a new resource to be created."
   type        = string
-  default     = "terraform-test-mysql-server"
+  default     = null
 }
 
 variable "mysql_fs_server_version" {
@@ -200,7 +200,7 @@ variable "mysql_fs_server_version" {
 variable "mysql_sku_name" {
   description = "Specifies the SKU Name for this MySQL Flexible Server."
   type        = string
-  default     = "B_Standard_B1s"
+  default     = null
 }
 
 variable "mysql_databases" {
@@ -287,7 +287,7 @@ variable "postgres_storage_mb" {
 
 variable "postgres_sku_name" {
   type    = string
-  default = "GP_Standard_D4s_v3"
+  default = null
 }
 
 
