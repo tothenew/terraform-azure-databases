@@ -31,6 +31,9 @@ module "database_main" {
 
   create_mysql_fs      = true
 
+  # if you want to create a mysql flexible server as public then set is_public = true
+  is_public = true
+
   project_name_prefix = "dev"
   
   default_tags = {

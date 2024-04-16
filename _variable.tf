@@ -25,7 +25,7 @@ variable "common_tags" {
 variable "resource_group_name" {
   description = "The name of the Azure Resource Group where the resources will be created."
   type        = string
-  default     = null
+  default     = "gaurav"
 }
 
 variable "location" {
@@ -54,12 +54,17 @@ variable "dns_zone_virtual_network_link_name" {
   default     = "vnet-private-zone-link"
 }
 
-variable "private_dns_zone_name" {
+variable "mysql_private_dns_zone_name" {
   description = "The name of the private DNS zone for the Database Server."
-  type        = list(string)
-  default     = ["mysql.mysql.database.azure.com", "psql.postgres.database.azure.com"]
+  type        = string
+  default     = "mysql.mysql.database.azure.com"
 }
 
+variable "postgresql_private_dns_zone_name" {
+  description = "The name of the private DNS zone for the Database Server."
+  type        = string
+  default     = "psql.postgres.database.azure.com"
+}
 
 variable "create_mysql_fs" {
   description = "A boolean flag to determine whether to create the MySQL Flexible Server resources or not."
@@ -70,7 +75,7 @@ variable "create_mysql_fs" {
 variable "create_postgresql_fs" {
   description = "A boolean flag to determine whether to create the PostgreSQL Flexible Server resources or not."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "create_mariadb" {
@@ -82,7 +87,7 @@ variable "create_mariadb" {
 variable "is_public" {
   description = "to create mysql or postgresql server as publuc or not"
   type        = bool
-  default     = false
+  default     = true
 }
 
 ########################################################################################################################################
@@ -265,7 +270,7 @@ variable "postgres_storage_tier" {
 variable "postgres_server_name" {
   description = "Specifies the name of the PostgreSQL Server. Changing this forces a new resource to be created."
   type        = string
-  default     = null
+  default     = "server1"
 }
 
 variable "postgres_server_version" {

@@ -101,7 +101,7 @@ server_configurations = {
 }
 
 # firewall rule for mysql to allow specific ip you can specific as many ip rule  else set the value as null if you don't need  
-allowed_cidrs = { 
+postgres_firewall_rule = { 
    rule1 = {
       start_ip_address = "0.0.0.0"
       end_ip_address  = "255.255.255.255"

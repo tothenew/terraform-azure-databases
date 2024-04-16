@@ -21,19 +21,19 @@ resource "azurerm_postgresql_flexible_server" "prostgres_flexible_server" {
 
 
   dynamic "high_availability" {
-  for_each = toset((!startswith(var.postgres_sku_name, "B") && var.postgres_high_availability != null) ? [var.postgres_high_availability] : [])
+    for_each = var.postgres_high_availability != null ? [1] : []
     content {
-      mode                      = lookup(postgres_high_availability.value, "mode", null)
-      standby_availability_zone = lookup(postgres_high_availability.value, "standby_availability_zone", null)
+      mode                      = lookup(var.postgres_high_availability, "mode", null)
+      standby_availability_zone = lookup(var.postgres_high_availability, "standby_availability_zone", null)
     }
   }
 
   dynamic "maintenance_window" {
-    for_each = toset(var.postgres_maintenance_window != null ? [var.postgres_maintenance_window] : [])
+    for_each = var.postgres_maintenance_window != null ? [1] : []
       content {
-        day_of_week  = lookup(postgres_maintenance_window.value, "day_of_week", 0)
-        start_hour   = lookup(postgres_maintenance_window.value, "start_hour", 0)
-        start_minute = lookup(postgres_maintenance_window.value, "start_minute", 0)
+        day_of_week  = lookup(var.postgres_maintenance_window, "day_of_week", 0)
+        start_hour   = lookup(var.postgres_maintenance_window, "start_hour", 0)
+        start_minute = lookup(var.postgres_maintenance_window, "start_minute", 0)
     }
   }
   delegated_subnet_id = var.is_public ? null : data.azurerm_subnet.db_subnet[0].id
@@ -57,7 +57,7 @@ resource "azurerm_postgresql_flexible_server_database" "postgres_database" {
 }
 
 resource "azurerm_postgresql_flexible_server_configuration" "example" {
-  for_each            = var.postgres_server_configurations != null ? var.postgres_server_configurations : {}
+  for_each     = var.create_postgresql_fs  == true && var.postgres_server_configurations != null ? var.postgres_server_configurations : {}
 
   name      = each.key
   server_id = azurerm_postgresql_flexible_server.prostgres_flexible_server[0].id
@@ -65,7 +65,7 @@ resource "azurerm_postgresql_flexible_server_configuration" "example" {
 }
 
 resource "azurerm_postgresql_flexible_server_firewall_rule" "firewall_rule" {
-  for_each = var.is_public && var.postgres_firewall_rule != null ? var.postgres_firewall_rule : {}
+  for_each = var.create_postgresql_fs  == true  && var.is_public == true && var.postgres_firewall_rule != null ? var.postgres_firewall_rule : {}
 
   name                = each.key
   server_id           = azurerm_postgresql_flexible_server.prostgres_flexible_server[0].id

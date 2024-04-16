@@ -65,7 +65,7 @@ resource "azurerm_mysql_flexible_database" "mysql_database" {
 }
 
 resource "azurerm_mysql_flexible_server_configuration" "example" {
-  for_each            = var.server_configurations != null ? var.server_configurations : {}
+  for_each            = var.create_mysql_fs == true && var.server_configurations != null ? var.server_configurations : {}
   name                = each.key
   resource_group_name = data.azurerm_resource_group.rg.name
   server_name         = azurerm_mysql_flexible_server.mysql_flexible_server.0.name
@@ -73,7 +73,7 @@ resource "azurerm_mysql_flexible_server_configuration" "example" {
 }
 
 resource "azurerm_mysql_flexible_server_firewall_rule" "firewall_rules" {
-  for_each = var.is_public && var.allowed_cidrs != null ? var.allowed_cidrs : {}
+  for_each = var.create_mysql_fs == true && var.is_public && var.allowed_cidrs != null ? var.allowed_cidrs : {}
 
   name                = each.key
   resource_group_name = data.azurerm_resource_group.rg.name
